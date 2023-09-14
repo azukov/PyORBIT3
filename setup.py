@@ -1,6 +1,10 @@
+import sys
+
 from setuptools import Extension, setup
 from pathlib import Path
 import os
+import compile_assist
+from compile_assist.libraries import find_library, find_mpi
 
 # main dir is special
 # we need it in include but not the actual main.cc
@@ -17,20 +21,39 @@ for f in Path("src").rglob("*.cc"):
     if include:
         src.append(str(f))
 
-include = []
+mpi = find_mpi()
+
+if mpi:
+    library_dirs, libraries, include_dirs, extra_compile_args = mpi
+else:
+    library_dirs, libraries, include_dirs, extra_compile_args = [], [], [], ["-DUSE_MPI=0"]
+    print('MPI not found will be compiled without MPI support')
+
+fftw = find_library('fftw3', ['/opt/homebrew/'])
+if fftw:
+    library_dirs += fftw[0]
+    libraries += fftw[1]
+    include_dirs += fftw[2]
+    extra_compile_args += fftw[3]
+else:
+    print('Stop. Library fftw3 not found')
+    sys.exit()
+
+
 for folder in os.walk("src"):
     excludes = ["src", "src/libmain", "src/libmain/orbit"]
     if folder[0] not in excludes:
-        include.append(folder[0])
+        include_dirs.append(folder[0])
         print(folder[0])
 
 extension_mod = Extension(
     "orbit.core._orbit",
     sources=src,
-    libraries=["fftw3"],
-    include_dirs=include,
-    extra_compile_args=["-DUSE_MPI=1", "-fPIC", "-lmpi", "-lmpicxx", "-Wl,--enable-new-dtags"],
-    extra_link_args=["-lfftw3", "-lm", "-lmpi", "-lmpicxx", "-fPIC"],
+    libraries=libraries,
+    include_dirs=include_dirs,
+    library_dirs=library_dirs,
+    extra_compile_args=extra_compile_args + ["-Wl,--enable-new-dtags"],
+    extra_link_args=["-lm", "-fPIC"],
 )
 
 packages = ["orbit.core"]
@@ -69,6 +92,7 @@ for mod in core_modules:
     packages.append(f"orbit.core.{mod}")
     package_dir.update({f"orbit.core.{mod}": "src/libmain/module_template"})
 
+
 # Define the setup parameters
 setup(
     ext_modules=[extension_mod],
@@ -78,3 +102,4 @@ setup(
     setup_requires=["setuptools_scm"],
     scripts=["bin/pyORBIT"],
 )
+
