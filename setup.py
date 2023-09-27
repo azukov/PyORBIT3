@@ -1,14 +1,49 @@
-import sys
-
 from setuptools import Extension, setup
-from pathlib import Path
 import os
-import compile_assist
-from compile_assist.libraries import find_library, find_mpi
+from pathlib import Path
+import subprocess
 
-# main dir is special
-# we need it in include but not the actual main.cc
-# libmain contains python package def, we don't want it in C++ sources
+
+def parse_options(line):
+    library_dirs = []
+    libraries = []
+    include_dirs = []
+    compile_options = []
+    for option in line.split(' ')[1:]:
+        if option.startswith('-L'):
+            library_dirs.append(option[2:])
+        elif option.startswith('-l'):
+            libraries.append(option[2:])
+        elif option.startswith('-I'):
+            include_dirs.append(option[2:])
+        else:
+            compile_options.append(option[2:])
+    return library_dirs, libraries, include_dirs, compile_options
+
+
+library_dirs, libraries, include_dirs, extra_compile_args = [], [], [], []
+
+
+mpi_compiler = os.environ.get('MPICC', default='mpicc')
+
+if mpi_compiler:
+    try:
+        result = subprocess.check_output([mpi_compiler, '-showme']).decode().strip()
+        options = parse_options(result)
+        library_dirs, libraries, include_dirs, extra_compile_args = options
+    except Exception:
+        print("MPICC not valid")
+        library_dirs, libraries, include_dirs, extra_compile_args = [], [], [], ["-DUSE_MPI=0"]
+        print('MPI not found will be compiled without MPI support')
+
+fftw_include = os.environ.get('FFTW3_INCLUDE_DIR', default=None)
+if fftw_include:
+    include_dirs.append(fftw_include)
+fftw_lib = os.environ.get('FFTW3_LIB_DIR', default=None)
+if fftw_lib:
+    library_dirs.append(fftw_lib)
+libraries += ['fftw3']
+
 
 src = []
 
@@ -20,24 +55,6 @@ for f in Path("src").rglob("*.cc"):
             include = False
     if include:
         src.append(str(f))
-
-mpi = find_mpi()
-
-if mpi:
-    library_dirs, libraries, include_dirs, extra_compile_args = mpi
-else:
-    library_dirs, libraries, include_dirs, extra_compile_args = [], [], [], ["-DUSE_MPI=0"]
-    print('MPI not found will be compiled without MPI support')
-
-fftw = find_library('fftw3', ['/opt/homebrew/'])
-if fftw:
-    library_dirs += fftw[0]
-    libraries += fftw[1]
-    include_dirs += fftw[2]
-    extra_compile_args += fftw[3]
-else:
-    print('Stop. Library fftw3 not found')
-    sys.exit()
 
 
 for folder in os.walk("src"):
