@@ -5,6 +5,17 @@ import argparse
 from pathlib import Path
 from distutils.ccompiler import new_compiler
 
+
+import platform
+p = platform.uname().system
+LIB_TYPE = 'shared'
+DEFAULT_LIBS = ['m']
+
+if p == 'Darwin':
+    LIB_TYPE = 'dylib'
+    DEFAULT_LIBS = []
+
+
 def parse_options(line):
     library_dirs = []
     libraries = []
@@ -47,7 +58,9 @@ def check_library(name, include_dir=None, lib_dir=None, test_file=None):
             compiler.add_include_dir(str(include_dir))
         if lib_dir:
             compiler.add_library_dir(str(lib_dir))
+        [compiler.add_library(n) for n in DEFAULT_LIBS]
         compiler.add_library(name)
+
         compiler.compile([src])
         compiler.link_executable([obj], f_name)
         return True
@@ -62,12 +75,11 @@ def check_library(name, include_dir=None, lib_dir=None, test_file=None):
         os.chdir(old_path)
 
 
-def find_library(name, places_to_look=None, test_file=None):
+def find_library(name, places_to_look=None, test_file=None, lib_type=LIB_TYPE):
     if not places_to_look:
         places_to_look = []
     compiler = new_compiler()
-    library = compiler.library_filename(name)
-
+    library = compiler.library_filename(name, lib_type=lib_type)
     for place in places_to_look:
         for p in Path(place).glob(f'**/{library}'):
             lib_dir = p.parent
@@ -125,8 +137,6 @@ def main():
 
         mpi = find_mpi(['/opt/homebrew/'])
         fftw3 = find_library('fftw3', ['/opt/homebrew/'])
-        print(mpi)
-        print(fftw3)
 
         def insert_after(origin, marker, new_lines):
             for i, l in enumerate(origin):
