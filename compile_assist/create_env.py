@@ -10,10 +10,12 @@ import platform
 p = platform.uname().system
 LIB_TYPE = 'shared'
 DEFAULT_LIBS = ['m']
+SEARCH = ['/usr']
 
 if p == 'Darwin':
     LIB_TYPE = 'dylib'
     DEFAULT_LIBS = []
+    SEARCH = ['/opt/homebrew']
 
 
 def parse_options(line):
