@@ -36,7 +36,7 @@ def parse_options(line):
     return library_dirs, libraries, include_dirs, compile_options
 
 
-def find_mpi(places_to_look=None):
+def find_mpi(places_to_look=SEARCH):
     if not places_to_look:
         places_to_look = []
     for place in places_to_look:
@@ -77,7 +77,7 @@ def check_library(name, include_dir=None, lib_dir=None, test_file=None):
         os.chdir(old_path)
 
 
-def find_library(name, places_to_look=None, test_file=None, lib_type=LIB_TYPE):
+def find_library(name, places_to_look=SEARCH, test_file=None, lib_type=LIB_TYPE):
     if not places_to_look:
         places_to_look = []
     compiler = new_compiler()
@@ -122,23 +122,14 @@ def main():
     #  create virtual environment
     try:
 
-        if 'PYTHONPATH' in os.environ:
-            del os.environ['PYTHONPATH']
-        if 'PIP_CONFIG_FILE' in os.environ:
-            del os.environ['PIP_CONFIG_FILE']
-
         result = subprocess.run([python, '-m', 'venv', venv_name])
         if result.returncode != 0:
             print(f'Failed to create {venv_name}.')
             return
         print(f'Virtual environment {venv_name} created.')
 
-
-
-        # patch activation script to get rid of machine wide settings
-
-        mpi = find_mpi(['/opt/homebrew/'])
-        fftw3 = find_library('fftw3', ['/opt/homebrew/'])
+        mpi = find_mpi()
+        fftw3 = find_library('fftw3')
 
         def insert_after(origin, marker, new_lines):
             for i, l in enumerate(origin):
