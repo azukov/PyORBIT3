@@ -1,1 +1,1 @@
-python install/create_env.py tenv
+python3 install/create_env.py tenv
