@@ -4,7 +4,7 @@ jobs:
  centos-stream:
     runs-on: ubuntu-latest
     container:
-      image: quay.io/centos/centos:stream
+      image: quay.io/centos/centos:stream9
     steps:
          - name: Install packages
            run: |
