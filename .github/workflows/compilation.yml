@@ -45,3 +45,30 @@ jobs:
          - name: Test
            run: |
              .github/workflows/run-tests.sh
+             
+
+ conda:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
+    steps:
+         - name: Install Conda
+           run: |
+             curl https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc | gpg --dearmor > conda.gpg
+             install -o root -g root -m 644 conda.gpg /usr/share/keyrings/conda-archive-keyring.gpg
+             echo "deb [arch=amd64 signed-by=/usr/share/keyrings/conda-archive-keyring.gpg] https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main" | sudo tee -a /etc/apt/sources.list.d/conda.list
+             apt update
+             apt install conda
+             
+
+         - uses: actions/checkout@v2
+           with:
+            fetch-depth: 0
+#
+#         - name: Build
+#           run: |
+#             .github/workflows/build.sh
+#
+#         - name: Test
+#           run: |
+#             .github/workflows/run-tests.sh
