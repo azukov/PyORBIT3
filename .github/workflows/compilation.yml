@@ -4,8 +4,7 @@ jobs:
  centos-stream:
     runs-on: ubuntu-latest
     container:
-#      image: quay.io/centos/centos:stream
-      image: install/images/CentOS.Dockerfile
+      image: quay.io/centos/centos:stream
     steps:
          - name: Initialize git
            run: |
