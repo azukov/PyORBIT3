@@ -17,7 +17,7 @@ def parse_options(line):
         elif option.startswith('-I'):
             include_dirs.append(option[2:])
         else:
-            compile_options.append(option[2:])
+            compile_options.append(option[:])
     return library_dirs, libraries, include_dirs, compile_options
 
 
