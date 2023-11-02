@@ -22,3 +22,25 @@ jobs:
          - name: Test
            run: |
              .github/workflows/run-tests.sh
+
+ ubuntu:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
+    steps:
+         - name: Install packages
+           run: |
+             apt-get install -y  build-essential python3 openmpi-bin openmpi-common libopenmpi-dev  
+             apt-get install -y  zlib1g-dev libfftw3-dev python3-distutils python3-venv libpython3-dev git
+
+         - uses: actions/checkout@v2
+           with:
+            fetch-depth: 0
+
+         - name: Build
+           run: |
+             .github/workflows/build.sh
+
+         - name: Test
+           run: |
+             .github/workflows/run-tests.sh
