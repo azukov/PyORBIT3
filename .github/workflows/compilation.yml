@@ -54,13 +54,13 @@ jobs:
     steps:
          - name: Install Conda
            run: |
-             apt update
-             apt install curl gpg
+             apt update -y
+             apt install -y curl gpg
              curl https://repo.anaconda.com/pkgs/misc/gpgkeys/anaconda.asc | gpg --dearmor > conda.gpg
              install -o root -g root -m 644 conda.gpg /usr/share/keyrings/conda-archive-keyring.gpg
              echo "deb [arch=amd64 signed-by=/usr/share/keyrings/conda-archive-keyring.gpg] https://repo.anaconda.com/pkgs/misc/debrepo/conda stable main" | sudo tee -a /etc/apt/sources.list.d/conda.list
-             apt update
-             apt install conda
+             apt update -y
+             apt install -y conda
              
 
          - uses: actions/checkout@v2
