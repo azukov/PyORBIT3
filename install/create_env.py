@@ -180,7 +180,7 @@ def main():
 
         #  update pip
         pip = path / 'bin' / 'pip'
-        result = subprocess.run([pip, 'install', '-U', 'pip', 'setuptools_scm', 'pytest'], stdout=subprocess.PIPE)
+        result = subprocess.run([pip, 'install', '-U', 'pip', 'setuptools', 'setuptools_scm', 'pytest'], stdout=subprocess.PIPE)
         if result.returncode != 0:
             print(f'Failed to update pip .')
             return

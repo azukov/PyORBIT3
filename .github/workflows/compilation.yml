@@ -1,0 +1,20 @@
+name: build-pyorbit
+on: push
+jobs:
+ centos-stream:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/centos/centos:stream
+    steps:
+         - uses: actions/checkout@v2
+         - name: Install packages
+           run: |
+             dnf group install -y "Development Tools"
+             dnf install -y python3-devel openmpi-devel fftw3-devel
+
+         - name: Make
+           run: |
+             .github/workflows/build.sh
+#         - name: Test
+#           run: |
+#             .github/workflows/run-tests.sh
