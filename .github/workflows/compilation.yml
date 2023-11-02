@@ -6,22 +6,19 @@ jobs:
     container:
       image: quay.io/centos/centos:stream
     steps:
-         - name: Initialize git
-           run: |
-             dnf install -y git
-
-         - uses: actions/checkout@v4
-           with:
-            fetch-depth: 0
-
          - name: Install packages
            run: |
              dnf group install -y "Development Tools"
              dnf install -y python3-devel openmpi-devel fftw3-devel
 
-         - name: Make
+         - uses: actions/checkout@v2
+           with:
+            fetch-depth: 0
+
+         - name: Build
            run: |
              .github/workflows/build.sh
+
          - name: Test
            run: |
              .github/workflows/run-tests.sh
