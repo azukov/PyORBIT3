@@ -7,6 +7,10 @@ jobs:
 #      image: quay.io/centos/centos:stream
       image: install/images/CentOS.Dockerfile
     steps:
+         - name: Initialize git
+           run: |
+             dnf install git
+
          - uses: actions/checkout@v4
            with:
             fetch-depth: 0
