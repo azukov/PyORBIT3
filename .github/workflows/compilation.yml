@@ -4,7 +4,8 @@ jobs:
  centos-stream:
     runs-on: ubuntu-latest
     container:
-      image: quay.io/centos/centos:stream
+#      image: quay.io/centos/centos:stream
+      image: install/images/CentOS.Dockerfile
     steps:
          - uses: actions/checkout@v4
            with:
