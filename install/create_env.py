@@ -114,8 +114,8 @@ def main():
 
     args = parser.parse_args()
 
-    if parser.mpi:
-        SEARCH.insert(0, [parser.mpi])
+    if args.mpi:
+        SEARCH.insert(0, [args.mpi])
 
     venv_name = args.venv_name
     python = args.python if args.python else sys.executable
