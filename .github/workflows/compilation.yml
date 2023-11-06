@@ -1,11 +1,13 @@
 name: build-pyorbit
 on: push
 jobs:
+ 
  centos-stream:
     runs-on: ubuntu-latest
     container:
       image: quay.io/centos/centos:stream9
     steps:
+         - uses: cutenode/action-always-fail@v1.0.0
          - name: Install packages
            run: |
              dnf group install -y "Development Tools"
