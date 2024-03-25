@@ -1,0 +1,14 @@
+[build-system]
+build-backend = 'mesonpy'
+requires = ['meson-python']
+
+[project]
+name = 'orbit'
+version = '0.0.1'
+description = 'Use meson-python to build c++ anf python modules.'
+requires-python = '>=3.9'
+authors = [
+  {name = 'Alexander Zhukov', email = 'zhukovap@ornl.gov'},
+]
+
+
