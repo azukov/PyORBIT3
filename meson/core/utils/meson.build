@@ -1,17 +1,18 @@
-utils_inc = include_directories('../../../src/utils/')
-m_d = '../../../src/utils/'
-inc +=  [utils_inc]
 
-utils_sources = files([
-    m_d + 'BufferStore.cc',
-    m_d + 'CppPyWrapper.cc',
+src = base_src + '/utils/'
+_inc = include_directories(src)
+inc += _inc
 
-
+sources = files([
+    src + 'BufferStore.cc',
+    src + 'CppPyWrapper.cc',
 ])
 
-utils_lib = static_library('utils',
-    sources: utils_sources,
+lib = library('utils',
+    sources: sources,
     include_directories: inc,
-#    install: true,
-#    link_args: link_a,
+    link_args: link_a,
+    install: true,
 )
+
+utils_lib = declare_dependency(link_with : lib)
