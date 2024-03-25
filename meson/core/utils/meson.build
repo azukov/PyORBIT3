@@ -1,7 +1,8 @@
-
 src = base_src + '/utils/'
 _inc = include_directories(src)
 inc += _inc
+
+
 
 sources = files([
     src + 'BufferStore.cc',
@@ -11,7 +12,8 @@ sources = files([
 lib = library('utils',
     sources: sources,
     include_directories: inc,
-    link_args: link_a,
+#    link_args: link_a,
+    dependencies: [py3],
     install: true,
 )
 

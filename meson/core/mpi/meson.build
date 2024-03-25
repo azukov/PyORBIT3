@@ -17,7 +17,7 @@ sources = files([
 lib = library('mpi',
     sources: sources,
     include_directories: inc,
-    dependencies : [utils_lib],
+    dependencies : [utils_lib, py3],
     link_args: link_a,
     install: true
 )

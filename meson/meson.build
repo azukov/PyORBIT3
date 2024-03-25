@@ -4,6 +4,8 @@ project('orbit', ['cpp'], version: '0.0.1')
 # Add Python installation details
 python = import('python').find_installation(pure: false)
 
+py3 = python.dependency()
+
 # Add C++ compiler details
 cpp = meson.get_compiler('cpp')
 
@@ -26,10 +28,10 @@ mpi_ext = python.extension_module('orbit_mpi',
       sources: [base + '/mpi_init.cc'],
       include_directories: inc,
       cpp_args: ['-fPIC', '-std=c++11'],
-      dependencies: [mpi_lib, utils_lib],
+      dependencies: [core_dep],
       install: true,
       subdir: 'orbit/core',
-      link_args: link_a,
+#      link_args: link_a,
 )
 
 
