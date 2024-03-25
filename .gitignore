@@ -9,3 +9,6 @@ PyORBIT.egg-info
 *.so
 .*.swp
 .eggs
+/meson/build/
+/meson/buildDir/
+/meson/.mp3/
