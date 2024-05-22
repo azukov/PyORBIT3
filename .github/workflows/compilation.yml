@@ -2,7 +2,6 @@ name: build-pyorbit
 
 on:
   push:
-  create:
     tags:
       - '*'
 
@@ -14,7 +13,7 @@ jobs:
     steps:
       - name: Install packages
         run: |
-          brew install pkg-config fftw
+          brew reinstall pkg-config fftw
 
       - uses: actions/checkout@v4
         with:
