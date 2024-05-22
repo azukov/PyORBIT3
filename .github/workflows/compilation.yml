@@ -1,5 +1,11 @@
 name: build-pyorbit
-on: push
+
+on:
+  push:
+  create:
+    tags:
+      - *
+
 jobs:
 
 
