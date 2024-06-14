@@ -1,6 +1,8 @@
 name: build-pyorbit
 
 on:
+  pull_request:
+  
   push:
     tags:
       - '*'
