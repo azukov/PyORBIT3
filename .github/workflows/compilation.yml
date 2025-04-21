@@ -137,7 +137,6 @@ jobs:
             fetch-depth: 0
          - name: Build
            run: |
-             mpirun -V
              .github/workflows/pip-build-mpich.sh
 
          - name: Test
