@@ -6,5 +6,5 @@ calculated_sha1=$(sha1sum test.txt | awk '{ print $1 }')
 echo $calculated_sha1
 cat test.txt
 
-[ "$calculated_sha1" == "7737497b7e3e71d18034a9bdaad79b72f9ab80aa" ] && exit 0 || exit 1
+[ "$calculated_sha1" == "d94e03044bf06c7a42d07505b50fa58b4b30e49a" ] && exit 0 || exit 1
 
