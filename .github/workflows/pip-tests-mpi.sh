@@ -33,7 +33,10 @@ mpirun -np 5 python examples/SpaceCharge/sc3D/sc_3d_drift_latt_uniform_sphere_bu
 calculated_sha5=$(sha1sum results5.txt | awk '{ print $1 }')
 
 echo "Diff between two runs."
+echo "$calculated_sha1" "$calculated_sha5"
 diff results1.txt results5.txt
 
 [ "$calculated_sha1" != "$calculated_sha5" ] && exit 1
+
+exit 0
 
